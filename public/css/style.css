@@ -57,7 +57,7 @@ body {
   /* Bet div element styles */
   
   .bet {
-    height: 100px;
+    height: 4em;
     width: 200px;
     background: url('../images/chip_stack.png');
     background-size: cover;
@@ -343,10 +343,22 @@ body {
     margin: 0 auto;
   }
   
+  #app > main > div:nth-child(1) > div > div.col-md-9.card-table-top {
+    padding: 0px;
+  }
+
   /* mobile device design */
   
   @media (max-width: 600px) {
   
+    .entire-view {
+      width: 103.3%;
+    }
+
+    .youBusted {
+      display: none;
+    }
+
     .howMuch {
       display: block;
     }
@@ -377,8 +389,7 @@ body {
       width: 90%;
     }
   
-    #instructions,
-    #replay {
+    #instructions {
       margin-bottom: 1em;
     }
   

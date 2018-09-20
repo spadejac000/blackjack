@@ -29,7 +29,7 @@ let extraPlayerBox = document.getElementsByClassName('extraPlayerBox')[0];
 let amountOfMoney = document.getElementsByClassName('amountOfMoney')[0];
 let image = document.getElementsByClassName('image');
 let splitButtonsContainer = document.getElementsByClassName('splitButtonsContainer')[0];
-var splitBox = document.getElementsByClassName('player1Box')[0].cloneNode(false);
+// var splitBox = document.getElementsByClassName('player1Box')[0].cloneNode(false);
 let playerBoxArray = document.getElementsByClassName('player1Box')[0];
 let dealerArray = [];
 let playerArray = [];
@@ -300,7 +300,7 @@ let cardsArray = [
 
 // This function allows you to make a bet
 const placeBet = (e) => {
-  coinsAudio.play();
+  document.getElementById('coins-audio').play();
   if (document.getElementById('betAmount').value > parseInt(document.getElementsByClassName('amountOfMoney')[0].innerHTML)) {
     alert("You don't have enough money!");
 } else if (document.getElementById('betAmount').value >= 5) {
@@ -319,7 +319,7 @@ var drawCard = function() {
 //deal randomly give cards to player/dealer from a deck
 function deal() {
     if(beginGame === true) {
-        dealAudio.play();
+        document.getElementById('deal-audio').play();
         var card = drawCard();
         var cardElement = document.createElement('img');
         cardElement.setAttribute('src', card.cardImage);
@@ -373,7 +373,7 @@ function deal() {
 
 // function to double your money before 
 let doubleDown = () => {
-  dealAudio.play();
+  document.getElementById('deal-audio').play();
   if(parseInt(document.getElementById('betAmount').value) <= parseInt(document.getElementsByClassName('amountOfMoney')[0].innerHTML)) {
     document.getElementsByClassName('amountOfMoney')[0].innerHTML = parseInt(document.getElementsByClassName('amountOfMoney')[0].innerHTML) - parseInt(document.getElementById('betAmount').value);
     document.getElementById('betAmount').value *= 2;
@@ -393,7 +393,7 @@ let doubleDown = () => {
 // split double down button
 
 let splitDoubleDown = () => {
-  dealAudio.play();
+  document.getElementById('deal-audio').play();
   if(parseInt(document.getElementById('betAmount').value) <= parseInt(document.getElementsByClassName('amountOfMoney')[0].innerHTML)) {
     document.getElementsByClassName('amountOfMoney')[0].innerHTML = parseInt(document.getElementsByClassName('amountOfMoney')[0].innerHTML) - parseInt(document.getElementById('betAmount').value);
     document.getElementById('betAmount').value *= 2;
@@ -428,7 +428,7 @@ var autoDraw = () => {
 // This function allows you to split your initial hand before you hit
 const split = () => {
   // if (playerArray[0] === playerArray[1]) {
-    dealAudio.play();
+    document.getElementById('deal-audio').play();
     document.getElementById('hit').disabled = false;
     document.getElementById('deal').disabled = true;
     document.getElementById('split-button').disabled = true;
@@ -468,6 +468,7 @@ const split = () => {
     let splitButtonsContainer = document.getElementsByClassName('splitButtonsContainer')[0];
     document.getElementById('extraButtonsContainer').appendChild(splitButtonsContainer).setAttribute('style', 'display: block; text-align: center;');
     [document.getElementsByClassName('player1Box')[0]].push(splitBox);
+    document.getElementById('extraButtonsContainer').style.display = 'block';
   // }
 }
 
@@ -504,7 +505,7 @@ const hitSplitHand = () => {
 }
 
 function stand() {
-    if (!(document.getElementById('dumbBox'))) {
+    if (document.getElementById('dumbBox') === null) {
       removeCardBack();
       while (dealerArray.reduce(function(acc, curVal) {return acc + curVal}) < 17) {
         var card = drawCard();
@@ -544,7 +545,6 @@ let splitStand = () => {
     document.getElementsByClassName('dealerCardBox')[0].appendChild(cardElement);
     dealerArray.push(card.rank);
   }
-  console.log(newPlayerArray, secondPlayerArray, dealerArray);
   p1Total = checkForAce(newPlayerArray);
   dealTotal = checkForAce(dealerArray);
   winner(p1Total, dealTotal);
@@ -560,19 +560,19 @@ function blackJack() {
   if(p1Total === 21 && dealTotal !== 21) {
     document.getElementsByClassName('youWin')[0].style.display = 'block';
     document.getElementsByClassName('amountOfMoney')[0].innerHTML = parseInt(document.getElementsByClassName('amountOfMoney')[0].innerHTML) + parseInt(document.getElementById('betAmount').value * 2);
-    winAudio.play();
+    document.getElementById('win-audio').play();
     disableButtons();
   } else if(dealTotal === 21 && p1Total !== 21) {
     document.getElementsByClassName('dealerWins')[0].style.display = 'block';
     // remove the card back
     document.getElementsByClassName('cardBack')[0].remove();
-    loseAudio.play();
+    document.getElementById('lose-audio').play();
     disableButtons();
   } else if(dealTotal === 21 && p1Total === 21) {
     // remove the card back
     document.getElementsByClassName('cardBack')[0].remove();
     document.getElementsByClassName('nobodyWins')[0].style.display = 'block';
-    tieAudio.play();
+    document.getElementById('tie-audio').play();
     disableButtons();
   } else {
   }
@@ -585,7 +585,7 @@ function bust() {
     document.getElementById('betAmount').value = parseInt(moneyPerHand) * parseInt([document.getElementsByClassName('player1Box')[0]].length - 1);
     [document.getElementsByClassName('player1Box')[0]].shift();
     disableButtons();
-    loseAudio.play();
+    document.getElementById('lose-audio').play();
     if(document.getElementById('dumbBox')) {
       document.getElementById('splitHitButton').disabled = false;
       document.getElementById('splitDoubleDownButton').disabled = false;
@@ -608,18 +608,18 @@ function winner(p1, deal) {
       // player wins
       document.getElementsByClassName('youWin')[0].style.display = 'block';
       document.getElementsByClassName('amountOfMoney')[0].innerHTML = parseInt(document.getElementsByClassName('amountOfMoney')[0].innerHTML) + parseInt(document.getElementById('betAmount').value * 2);
-      winAudio.play();
+      document.getElementById('win-audio').play();
       disableButtons();
   } else if ((p1 < deal && deal < 22) || (p1 > 21 && deal < 22) || p1 > 21) {
       // dealer wins.
       document.getElementsByClassName('dealerWins')[0].style.display = 'block';
-      loseAudio.play();
+      document.getElementById('lose-audio').play();
       disableButtons();
   } else {
     // push. nobody wins.
     document.getElementsByClassName('nobodyWins')[0].style.display = 'block';
     document.getElementsByClassName('amountOfMoney')[0].innerHTML = parseInt(document.getElementsByClassName('amountOfMoney')[0].innerHTML) + parseInt(document.getElementById('betAmount').value);
-    tieAudio.play();
+    document.getElementById('tie-audio').play();
     disableButtons();
   }
 }
@@ -654,7 +654,7 @@ function disableButtons() {
 
 // This function clears the table
 function replay() {
-  shuffleAudio.play();
+  document.getElementById('shuffle-audio').play();
   document.getElementById('bet').disabled = false;
   document.getElementById('deal').disabled = false;
   document.getElementById('stand').disabled = true;
@@ -677,16 +677,23 @@ function replay() {
   document.getElementsByClassName('nobodyWins')[0].style.display = 'none';
   document.getElementsByClassName('youWin')[0].style.display = 'none';
   document.getElementsByClassName('dealerWins')[0].style.display = 'none';
-  if(extraPlayerBox.hasChildNodes()) {
-    document.getElementsByClassName('extraPlayerBox')[0].innerHTML = "";
-    document.getElementById('splitButtonsContainer').style.display = 'none';
+  document.getElementById('extraButtonsContainer').style.display = 'none';
+  if(document.getElementById('dumbBox') !== null) {
+    console.log(document.getElementById('dumbBox'));
+    document.getElementById('dumbBox').style.display === "none";
+    document.getElementById('dumbBox') === null;
+    let dumbBox = document.getElementById("dumbBox");
+    dumbBox.parentNode.removeChild(dumbBox);
   }
+  document.getElementById('extraPlayerBox').innerHTML === '';
+  
+  
   beginGame = true;
 }
 
 var hit = () => {
-  dealAudio.play();
-  if (document.getElementById('dumbBox')) {
+  document.getElementById('deal-audio').play();
+  if (document.getElementById('dumbBox') !== null) {
       document.getElementById('split-button').disabled = true;
       document.getElementById('double-down').disabled = true;
       var card = drawCard();
@@ -718,12 +725,12 @@ var hit = () => {
 }
 
 const splitHit = () => {
-  if (dealerWins.style.display === 'block') {
-    dealerWins.style.display = 'none';
-  } else if (youWin.style.display === 'block') {
-    youWin.style.display = 'none';
-  } else if (tieGame.style.display === 'block') {
-    tieGame.style.display = 'none';
+  if (document.getElementsByClassName('dealerWins')[0].style.display === 'block') {
+    document.getElementsByClassName('dealerWins')[0].style.display = 'none';
+  } else if (document.getElementsByClassName('youWin')[0].style.display === 'block') {
+    document.getElementsByClassName('youWin')[0].style.display = 'none';
+  } else if (document.getElementsByClassName('nobodyWins')[0].style.display === 'block') {
+    document.getElementsByClassName('nobodyWins')[0].style.display = 'none';
   }
   var card = drawCard();
   var cardElement = document.createElement('img');
